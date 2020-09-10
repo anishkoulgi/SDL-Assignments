@@ -1,4 +1,4 @@
-package Main;
+package models;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -9,6 +9,7 @@ public class Expense implements Serializable {
     private Date date;
     private String remark;
     private String userId;
+
 
     public Expense(String expenseId, float amount, Date date, String remark,String userId) {
         this.expenseId = expenseId;

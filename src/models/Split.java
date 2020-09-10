@@ -1,4 +1,4 @@
-package Main;
+package models;
 
 import java.util.HashMap;
 import java.util.Vector;
