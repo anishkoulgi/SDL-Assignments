@@ -1,11 +1,15 @@
 package Main;
 
+import models.Expense;
+import models.User;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.Vector;
 
 public class Client {
@@ -21,37 +25,37 @@ public class Client {
         System.out.println("Menu \n 1) Add User \n 2) Add Expense \n 3) Calculate Split \n 4) Show total expenses \n 5) Show users \n 6) Show Expenses \n 7) Exit");
         String choice;
         BufferedReader fromUser = new BufferedReader(new InputStreamReader(System.in));
-        int users = 0;
         do {
             System.out.println("Please enter your choice");
             choice = fromUser.readLine();
             toServer.writeObject(choice);
             switch (choice) {
                 case "1" : {
-                    String name,id;
-                    System.out.println("Enter name and id of user");
-                    name = fromUser.readLine();
-                    id = fromUser.readLine();
-                    User newUser = new User(id,name, 0L);
-                    toServer.writeObject(newUser);
-                    users++;
+                    String fname,lname;
+                    System.out.println("Enter first name and last name");
+                    fname = fromUser.readLine();
+                    lname = fromUser.readLine();
+                    Hashtable<String,String> name = new Hashtable<>();
+                    name.put("fname",fname);
+                    name.put("lname",lname);
+                    toServer.writeObject(name);
                     break;
                 }
                 case "2" : {
-                    String id,remark,userId;
-                    System.out.println("Enter id of string,remark and id of user who paid the expense");
-                    id = fromUser.readLine();
+                    String remark,userId;
+                    System.out.println("Enter remark and id of user who paid the expense");
                     remark = fromUser.readLine();
                     userId = fromUser.readLine();
                     float amt;
                     System.out.println("Enter amount");
                     amt = Float.parseFloat(fromUser.readLine());
-                    Expense newExpense = new Expense(id,amt, new Date(),remark,userId);
+                    Expense newExpense = new Expense("",amt, new Date(),remark,userId);
                     toServer.writeObject(newExpense);
                     break;
                 }
                 case "3" : {
-                    float splitMatrix[][] = (float[][]) fromServer.readObject();
+                    int users = (Integer) fromServer.readObject();
+                    float[][] splitMatrix = (float[][]) fromServer.readObject();
                     System.out.println("[CLIENT]");
                     for (int i = 0; i < users; ++i) {
                         for (int j = 0; j < users; ++j) {
